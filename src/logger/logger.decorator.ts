@@ -32,7 +32,7 @@ export function logIO() {
                     logInfo: { error: err.message }
                 })
 
-                throw new err;
+                throw err;
             }
 
             logger.log({

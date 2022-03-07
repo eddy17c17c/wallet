@@ -1,73 +1,85 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+## Steps to setup
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
+1. Using docker
 ```bash
-$ npm install
+cd side-project
+docker-compose build
+docker-compose up -d
+```
+2. The project should be started and listening to port 3000
+
+## Project structure
+Basic MVC structure
+DTO store all the interfaces for create/update
+DAO store all the interfaces for accessing data
+Every controller and service follow a spec file for unit testing
+
+Example
+```bash
+│   └── wallet
+│       ├── dao
+│       │   └── withdrawWallet.dao.ts
+│       ├── dto
+│       │   ├── createTransfer.dto.ts
+│       │   └── createWallet.dto.ts
+│       ├── wallet.controller.spec.ts
+│       ├── wallet.controller.ts
+│       ├── wallet.module.ts
+│       ├── wallet.schema.ts
+│       ├── wallet.service.spec.ts
+│       └── wallet.service.ts
 ```
 
-## Running the app
+## To use the project
+Here is the postman collection of postman api
+https://drive.google.com/file/d/1VVAwFlOHqlYmI_fHt5RiVpalq7JYXgJr/view?usp=sharing
 
-```bash
-# development
-$ npm run start
+To interact with the wallet
+1. Create user
+2. Create wallet associated with user
+3.
+    a.(Transfer), calling /wallet/transfer with from & to wallet's id and with sufficient amount, they could transfer with each other
+    b.(Deposit), calling /wallet/transfer with to wallet's id only with trigger deposit flow
+    c.(Withdraw), calling /wallet/:id/withdraw with amount could withdraw money from wallet
+4. Every transaction are recorded within transaction log with wallet ids, amount and action.
+5. User can query transactions with wallet id and actions (transfer, deposit, withdraw)
 
-# watch mode
-$ npm run start:dev
+## Decision making
+1. Why using nestjs?
+As nestjs is a well structured framework, having scaffolding functions and plugins, it is very suitable for
+fast development. Also, with the help of decorators, i could do In Out system log for easy debugging.
 
-# production mode
-$ npm run start:prod
-```
+2. Why using mongo?
+It is because mongo is flexible and nestjs has a nice compatibility with it. Also, it is easy to set up with docker.
+However, there is a major concern. If the requirement for transaction is revertable or need to rollback in the future,
+a sql db might be a better choice.
 
-## Test
+3. DTO and DAO ?
+It is true that I may group all interfaces together into a shared file but splitting them by their nature allows me to provide and
+better project structure. This could reduce the learning curve of other developers to contribute.
 
-```bash
-# unit tests
-$ npm run test
+4. Logging decorator ?
+It is my personal preference to put in out log in controller level only. This is the result of concerning too much system log versus
+easy debugging.
 
-# e2e tests
-$ npm run test:e2e
+## Future Improvements
+Business side
+1. Currency
+I have leave a space for wallet and transaction record to support currency if needed.
 
-# test coverage
-$ npm run test:cov
-```
+2. Delegate transfer
+If user wants to delegate the ownership of his asset to other wallet and transfer, we could add a delegator field inside Wallet.
+The delegator field could be an array of object which stores the delegator's wallet id and amount that delegator could control.
 
-## Support
+Technical side
+1. Indexing
+If transaction logs become more and more, we have to do indexing for rapid log searching.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+2. Dto
+If the DTO of a resources is very large, it would be better to add an index.ts for centralizing the place for file imports.
 
-## Stay in touch
+3. Test case
+This project has a unit test coverage (>90%). However, integration test should also be implement for securing feature modifications.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+# Time used
+12 hours

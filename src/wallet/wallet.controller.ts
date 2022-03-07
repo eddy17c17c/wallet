@@ -3,8 +3,8 @@ import { WalletService } from './wallet.service';
 import { CreateWalletDto } from './dto/createWallet.dto';
 import { CreateTransferDto } from './dto/createTransfer.dto';
 import { WithdrawWalletDao } from './dao/withdrawWallet.dao';
-import { logIO } from 'src/logger/logger.decorator';
-import { Wallet } from './wallet.scehma';
+import { logIO } from '../logger/logger.decorator';
+import { Wallet } from './wallet.schema';
 
 @Controller('wallets')
 export class WalletController {
@@ -31,7 +31,7 @@ export class WalletController {
 
     @Get()
     @logIO()
-    async get(): Promise<Wallet> {
+    async list(): Promise<Wallet> {
         return this.walletService.list();
     }
 }

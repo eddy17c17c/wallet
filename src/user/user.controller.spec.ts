@@ -8,11 +8,11 @@ describe('UserController', () => {
     let controller, service;
 
     const createUserDto: CreateUserDto = {
-        name: 'eddy'
+        name: 'bob'
     };
 
     const mockUser = {
-        name: 'eddy',
+        name: 'bob',
         _id: '1',
     };
 
@@ -62,5 +62,4 @@ describe('UserController', () => {
         expect(service.create).toBeCalled();
     });
   });
-
 });

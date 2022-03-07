@@ -23,7 +23,7 @@ services:
         ports:
             - 27017:27017
         environment:
-            - MONGO_INITDB_ROOT_USERNAME=eddy
+            - MONGO_INITDB_ROOT_USERNAME=admin
             - MONGO_INITDB_ROOT_PASSWORD=123456
         volumes:
             - mongodb_data:/data/db

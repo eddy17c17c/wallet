@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Wallet, WalletDocument } from './wallet.scehma';
+import { Wallet, WalletDocument } from './wallet.schema';
 import { Model } from 'mongoose';
 import { CreateWalletDto } from './dto/createWallet.dto';
 import { CreateTransferDto } from './dto/createTransfer.dto';

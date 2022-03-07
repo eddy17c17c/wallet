@@ -11,11 +11,11 @@ describe('UserService', () => {
     let model: Model<User>;
 
     const createUserDto: CreateUserDto = {
-        name: 'eddy'
+        name: 'bob'
     };
 
     const mockUser = {
-        name: 'eddy',
+        name: 'bob',
         _id: '1',
     };
 
