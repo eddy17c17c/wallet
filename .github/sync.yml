@@ -1,3 +1,2 @@
 EddyTesting:
-    - source: test
-      dest: test
+    - tsconfig.json
