@@ -13,4 +13,4 @@ jobs:
       - name: Run GitHub File Sync
         uses: BetaHuhn/repo-file-sync-action@latest
         with:
-          GH_PAT: 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
+          GH_PAT: [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]
