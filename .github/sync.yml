@@ -1,0 +1,3 @@
+EddyTesting/sync-abis:
+    - source: test
+      dest: test
